@@ -12,7 +12,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,11 +32,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String STRING_DATA_NAME = "Data";
 
     CalendarView mCalendarView;
-    TextView dateTxt;
     String date;
-    Button addBtn;
+    Button addBtn, removeBtn;
     RecyclerView recyclerView;
     ListAdapter adapter;
+    Switch colorSwitch;
 
     int textColor;
     ArrayList<String> dateArray = new ArrayList<>();
@@ -47,9 +49,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mCalendarView = findViewById(R.id.calendarView);
-        dateTxt = findViewById(R.id.dateText);
         addBtn = findViewById(R.id.addBtn);
+        removeBtn = findViewById(R.id.removeBtn);
         recyclerView = findViewById(R.id.recyclerView);
+        colorSwitch = findViewById(R.id.switch1);
 
         textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark);
 
@@ -70,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         Date mDate = new Date(now); // Date 형식으로 고친다.
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd");
         date = simpleDate.format(mDate);  // 날짜, 시간을 가져오고 싶은 형태로 가져올 수 있다.
-        dateTxt.setText(date);
         String json = pref.getString("dateArray", "");  // string 가져오기
         dateArray = getDateArray(json); // 변환 후 가져오기
         for (String i: dateArray) { // recyclerView에 값 넣기
@@ -81,14 +83,24 @@ public class MainActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         }
 
+        colorSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+        });
+
+        // 캘린더 날짜 선택
         mCalendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             String clickedDate = year + "/" + String.format("%02d", (month + 1)) + "/" + String.format("%02d",  dayOfMonth);
             if (clickedDate.equals(date)) {
                 OnAddBtnClick(view);
             } else {
                 date = clickedDate;
-                dateTxt.setText(date);
             }
+        });
+
+        removeBtn.setOnClickListener(v -> {
+            editor.putString("dateArray", "");
+            editor.commit();
+            Toast.makeText(this, "삭제되었습니다.", Toast.LENGTH_SHORT).show();
         });
     }
 
