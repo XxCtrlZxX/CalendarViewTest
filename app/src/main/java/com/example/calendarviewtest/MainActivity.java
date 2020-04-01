@@ -1,30 +1,23 @@
 package com.example.calendarviewtest;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
     ListAdapter adapter;
     Switch colorSwitch;
 
-    int textColor;
+    int colorNum;
+    int[] colors = new int[2];
     ArrayList<String> dateArray = new ArrayList<>();
 
     SharedPreferences.Editor editor;
@@ -54,7 +48,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         colorSwitch = findViewById(R.id.switch1);
 
-        textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark);
+        colors[0] = ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark);
+        colors[1] = ContextCompat.getColor(getApplicationContext(), R.color.colorAccent);
+        colorNum = 0;
 
         SharedPreferences pref = getSharedPreferences(STRING_DATA_NAME, 0);
         editor = pref.edit();
@@ -75,16 +71,25 @@ public class MainActivity extends AppCompatActivity {
         date = simpleDate.format(mDate);  // 날짜, 시간을 가져오고 싶은 형태로 가져올 수 있다.
         String json = pref.getString("dateArray", "");  // string 가져오기
         dateArray = getDateArray(json); // 변환 후 가져오기
-        for (String i: dateArray) { // recyclerView에 값 넣기
-            DateItem dateItem = new DateItem();
-            dateItem.setDate(i);
-            dateItem.setTxtColor(textColor);
+        for (int i = 0; i < dateArray.size(); i++) { // recyclerView에 값 넣기
+            DateItem dateItem = new DateItem(i + 1, dateArray.get(i), colors[colorNum]);
             adapter.addItem(dateItem);
             adapter.notifyDataSetChanged();
         }
+        colorSwitch.setChecked(false);
+        colorSwitch.setText("Violet  ");
+        colorSwitch.setTextColor(colors[colorNum]);
 
+        // 컬러 스위치
         colorSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
+            if (isChecked) {
+                colorSwitch.setText("Cyan  ");
+                colorNum = 1;
+            } else {
+                colorSwitch.setText("Violet  ");
+                colorNum = 0;
+            }
+            colorSwitch.setTextColor(colors[colorNum]);
         });
 
         // 캘린더 날짜 선택
@@ -97,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // 삭제 버튼
         removeBtn.setOnClickListener(v -> {
             editor.putString("dateArray", "");
             editor.commit();
@@ -104,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // 추가 버튼 함수
     public void OnAddBtnClick(View v) {
         for (String i: dateArray) {
             if (date.equals(i)) {
@@ -114,9 +121,7 @@ public class MainActivity extends AppCompatActivity {
         dateArray.add(date);
 
         // 객체 생성, 값 세팅
-        DateItem dateItem = new DateItem();
-        dateItem.setDate(date);
-        dateItem.setTxtColor(textColor);
+        DateItem dateItem = new DateItem(dateArray.size(), date, colors[colorNum]);
 
         // ListAdapter에 객체 추가
         adapter.addItem(dateItem);

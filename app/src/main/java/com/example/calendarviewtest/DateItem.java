@@ -1,24 +1,24 @@
 package com.example.calendarviewtest;
 
-import android.graphics.Color;
-
 public class DateItem {
     String date;
-    int txtColor;
+    int txtColor, num;
+
+    public DateItem(int n, String date, int color) {
+        this.num = n;
+        this.date = date;
+        this.txtColor = color;
+    }
 
     public String getDate() {
         return date;
-    }
-
-    public void setDate(String date){
-        this.date = date;
     }
 
     public int getTxtColor() {
         return txtColor;
     }
 
-    public void setTxtColor(int color) {
-        this.txtColor = color;
+    public int getNum() {
+        return num;
     }
 }

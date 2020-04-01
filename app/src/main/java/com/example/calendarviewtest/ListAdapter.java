@@ -14,14 +14,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ItemViewHolder
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        TextView dateItemText;
+        TextView dateItemText, numItemText;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             dateItemText = itemView.findViewById(R.id.dateItemText);
+            numItemText = itemView.findViewById(R.id.numItemText);
         }
 
         public void onBind(DateItem dateItem) {
+            numItemText.setText(Integer.toString(dateItem.num));
             dateItemText.setText(dateItem.date);
             dateItemText.setTextColor(dateItem.txtColor);
         }
