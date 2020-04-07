@@ -29,7 +29,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ItemViewHolder
         }
     }
 
-    private ArrayList<DateItem> items = new ArrayList<>();
+    public ArrayList<DateItem> items = new ArrayList<>();
     //ListAdapter(ArrayList<DateItem> list) { mData = list; }
 
     @NonNull
@@ -59,4 +59,22 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ItemViewHolder
         // 추가 후 Adapter에 데이터가 변경된 것을 알림
         notifyDataSetChanged();
     }
+
+    /*public boolean onItemMove(int from_position, int to_position) {
+        // 이동할 객체 저장
+        DateItem dateItem = items.get(from_position);
+        // 이동할 객체 삭제
+        items.remove(from_position);
+        // 이동하고 싶은 position에 추가
+        items.add(to_position, dateItem);
+
+        // Adapter에 데이터 이동알림
+        notifyItemMoved(from_position, to_position);
+        return true;
+    }
+
+    public void onItemSwipe(int position) {
+        items.remove(position);
+        notifyItemRemoved(position);
+    }*/
 }
