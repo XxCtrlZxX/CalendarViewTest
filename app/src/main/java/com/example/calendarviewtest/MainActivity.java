@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         // 첫 화면 세팅
         long now = System.currentTimeMillis();  // 현재 시간을 가져온다.
         Date mDate = new Date(now); // Date 형식으로 고친다.
-        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd");
         date = simpleDate.format(mDate);  // 날짜, 시간을 가져오고 싶은 형태로 가져올 수 있다.
         String json = pref.getString("dateArray", "");  // string 가져오기
         dateArray = getDateArray(json); // 변환 후 가져오기
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 캘린더 날짜 선택
         mCalendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            String clickedDate = year + "/" + String.format("%02d", (month + 1)) + "/" + String.format("%02d",  dayOfMonth);
+            String clickedDate = year + "-" + String.format("%02d", (month + 1)) + "-" + String.format("%02d",  dayOfMonth);
             if (clickedDate.equals(date)) {
                 OnAddBtnClick(view);
             } else {
